@@ -1,5 +1,5 @@
 {
-  "name": "end2end-test-runner-for-wd.js",
+  "name": "end2end-wd-runner",
   "license": "MIT",
   "version": "0.1.0",
   "description": "All in end to end test runner for wd.js",
@@ -27,8 +27,9 @@
     "url": "https://github.com/agmen-hu/end2end-test-runner-for-wd.js/issues"
   },
   "bin" : {
-    "end2end" : "./index.coffee"
+    "end2end" : "./index"
   },
+  "main": "./main",
   "dependencies": {
     "commander": "~2.3.0",
     "glob": "*",
