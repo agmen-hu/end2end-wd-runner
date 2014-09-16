@@ -1,0 +1,8 @@
+wdRemote: ~
+
+browser:
+  browserName: 'firefox'
+
+onError:
+  takeScreenShot: false
+  sleep: 0

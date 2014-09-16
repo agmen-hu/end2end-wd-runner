@@ -1,0 +1,42 @@
+{
+  "name": "end2end-test-runner-for-wd.js",
+  "license": "MIT",
+  "version": "0.1.0",
+  "description": "All in end to end test runner for wd.js",
+  "keywords": [
+    "test",
+    "e2e",
+    "end2end",
+    "wd.js",
+    "selenium",
+    "webdriver"
+  ],
+  "author": {
+    "name": "dev.agmen.hu Ltd.",
+    "email": "support@agmen.hu",
+    "url": "https://agmen.hu"
+  },
+  "contributors": [
+    {
+      "name": "Gabor Kiss",
+      "email": "nevi@agmen.hu"
+    }
+  ],
+  "homepage": "https://github.com/agmen-hu/end2end-test-runner-for-wd.js",
+  "bugs": {
+    "url": "https://github.com/agmen-hu/end2end-test-runner-for-wd.js/issues"
+  },
+  "bin" : {
+    "end2end" : "./index.coffee"
+  },
+  "dependencies": {
+    "commander": "~2.3.0",
+    "glob": "*",
+    "extend": "*",
+    "js-yaml": "*",
+    "wd": "0.3.*",
+    "chai": "1.9.*",
+    "chai-as-promised": "4.1.*",
+    "selenium-standalone": "*"
+  }
+}
