@@ -22,9 +22,9 @@
       "email": "nevi@agmen.hu"
     }
   ],
-  "homepage": "https://github.com/agmen-hu/end2end-test-runner-for-wd.js",
+  "homepage": "https://github.com/agmen-hu/end2end-wd-runner",
   "bugs": {
-    "url": "https://github.com/agmen-hu/end2end-test-runner-for-wd.js/issues"
+    "url": "https://github.com/agmen-hu/end2end-wd-runner/issues"
   },
   "bin" : {
     "end2end" : "./index"
