@@ -38,7 +38,6 @@ module.exports = class Runner
       new (require action) @_wd, @_browser, @_config, @errorHandler
 
   runNextTest: =>
-    do @testCase.tearDown if @testCase
     return do @finish if @_fileIndex >= @_files.length
 
     do @_createNewContext if @_config.runner.startTestsWithNewBrowser
@@ -49,8 +48,9 @@ module.exports = class Runner
     @testCase = new (require testFile) @_wd, @_browser, @_config, @errorHandler
     @_context = do @testCase
       .setContext @_context
-      .test()
+      .runTest()
       .fail @errorHandler
+      .then => do @testCase.tearDown
       .runNextTest
 
     @_fileIndex++
