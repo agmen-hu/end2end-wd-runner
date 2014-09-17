@@ -43,7 +43,10 @@ module.exports = class Runner
 
     do @_createNewContext if @_config.runner.startTestsWithNewBrowser
 
-    @testCase = new (require @_files[@_fileIndex]) @_wd, @_browser, @_config, @errorHandler
+    testFile = @_files[@_fileIndex]
+    console.log 'Started: ' + testFile.replace @_config.root, ''
+
+    @testCase = new (require testFile) @_wd, @_browser, @_config, @errorHandler
     @_context = do @testCase
       .setContext @_context
       .test()
