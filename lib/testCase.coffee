@@ -8,5 +8,9 @@ module.exports = class TestCase
     @_context = value
     return @
 
+  runTest: ->
+    @_context = do @test
+
   test: -> @_context
-  tearDown: ->
+
+  tearDown: -> @_context
