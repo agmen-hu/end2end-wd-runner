@@ -27,17 +27,17 @@ config.root = root
 testFiles = []
 files = (require 'glob').sync root + '**/*Test.*'
 
-regexp = program.grep or config.runner.grep
-if regexp
-  regexp = new RegExp regexp
-  testFiles.push file for file in files when file.replace(root, '').match regexp
+grepRegexp = program.grep or config.runner.grep
+if grepRegexp
+  grepRegexp = new RegExp grepRegexp
+  testFiles.push file for file in files when file.replace(root, '').match grepRegexp
 else
   testFiles = files
 
-regexp = program.exclude or config.runner.exclude
-if regexp
-  regexp = new RegExp regexp
-  testFiles = testFiles.filter (file) -> not file.replace(root, '').match regexp
+excludeRegexp = if grepRegexp then undefined else program.exclude or config.runner.exclude
+if excludeRegexp
+  excludeRegexp = new RegExp excludeRegexp
+  testFiles = testFiles.filter (file) -> not file.replace(root, '').match excludeRegexp
 
 runner = new (require './lib/runner') testFiles, config
 selenium = new (require './lib/selenium') runner, config
