@@ -32,4 +32,4 @@ else
   testFiles = files
 
 runner = new (require './lib/runner') testFiles, config
-environment = new (require './lib/environment') runner, config
+selenium = new (require './lib/selenium') runner, config
