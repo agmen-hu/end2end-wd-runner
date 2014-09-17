@@ -8,7 +8,7 @@ program
   .option '-b --browser <firefox|chrome|phantomjs>', 'Default is come from the config'
   .option '-r --root <directory>', 'root directory for text search. Default is end2endTests'
   .option '-g --grep <pattern>', 'regexp matcher for wich tests being executed'
-  .option '-e --exclude <pattern>', 'regexp matcher for wich tests being excluded'
+  .option '-e --exclude <pattern>', 'regexp matcher for wich tests being excluded. Default is manually'
   .parse process.argv
 
 root = if program.root then program.root else 'end2endTests'

@@ -6,3 +6,8 @@ browser:
 onError:
   takeScreenShot: false
   sleep: 0
+
+runner:
+  grep: ''
+  exlude: manually
+  startTestsWithNewBrowser: false
