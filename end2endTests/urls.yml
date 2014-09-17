@@ -1,0 +1,3 @@
+urls:
+  bing: 'http://www.bing.com/search?q='
+  google: 'https://www.google.com/search?q='
