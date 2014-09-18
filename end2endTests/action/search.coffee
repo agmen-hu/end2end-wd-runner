@@ -1,14 +1,15 @@
 module.exports = class Search extends require('../../main').Action
+  # all method which is ending with Action added to the wd
   searchAction: (context, where) ->
     context
       .get @_config.urls[where] + @_config.search.forWhat
       .pageHasWikipediaShortcut where
 
   pageHasWikipediaShortcutAction: (context, where) ->
-    # must return a promise hence the shortcut for browser.noop
+    # must return a promise hence the shortcut for the browser.noop
     return do @_nothing if where isnt 'google'
 
-    @_browser
+    context
       .hasElementById 'rcnt'
       .then (exists) => if exists then do @_shourtCutFound else do @_nothing
 

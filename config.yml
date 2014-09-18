@@ -1,5 +1,7 @@
+# passthrough for the wd.promiseChainRemote
 wdRemote: ~
 
+# passthrough for the wd.browser.init
 browser:
   browserName: 'firefox'
 
@@ -9,5 +11,5 @@ onError:
 
 runner:
   grep: ''
-  exlude: manually
+  exclude: manually
   startTestsWithNewBrowser: false
