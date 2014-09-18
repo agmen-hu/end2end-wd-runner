@@ -59,7 +59,7 @@ module.exports = class Runner
   finish: ->
     @_context
       .then => do @_browser.quit
-      .done -> process.exit @_errorCount
+      .done => process.exit @_errorCount
 
   errorHandler: (error) =>
     @_errorCount++
