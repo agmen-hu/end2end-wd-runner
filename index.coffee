@@ -16,7 +16,7 @@ root = do process.cwd + '/' + root if root.indexOf '/' isnt -1
 root += '/'
 
 configParser = new (require './lib/configParser')
-configPath = if program.config then program.config else root + '/config.yml'
+configPath = root + '/' + (if program.config then program.config else 'config.yml')
 
 config = configParser.load __dirname + '/config.yml'
 config = configParser.load configPath, config
