@@ -42,7 +42,7 @@ module.exports = class Runner
     do @_createNewContext if @_config.runner.startTestsWithNewBrowser
 
     testFile = @_files[@_fileIndex]
-    console.log 'Started: ' + testFile.replace @_config.root, ''
+    console.log '\nStarted: ' + testFile.replace @_config.root, ''
 
     @testCase = new (require testFile) @_wd, @_browser, @_config, @errorHandler
     @_context = @testCase
@@ -58,7 +58,9 @@ module.exports = class Runner
   finish: ->
     @_context
       .then => do @_browser.quit
-      .done => process.exit @_errorCount
+      .done => 
+        console.log '\nFinished' + if @_errorCount then " with errors count: #{@_errorCount}" else ''
+        process.exit @_errorCount
 
   errorHandler: (error) =>
     @_errorCount++
