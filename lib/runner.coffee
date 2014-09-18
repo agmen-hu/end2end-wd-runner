@@ -11,6 +11,7 @@ module.exports = class Runner
 
   start: ->
     @_fileIndex = 0;
+    @_errorCount = 0;
 
     do @_createNewContext if not @_config.runner.startTestsWithNewBrowser
     do @runNextTest
@@ -58,9 +59,11 @@ module.exports = class Runner
   finish: ->
     @_context
       .then => do @_browser.quit
-      .done -> do process.exit
+      .done -> do process.exit @_errorCount
 
   errorHandler: (error) =>
+    @_errorCount++
+
     if @_takeScreenShotOnFail
       @_browser.saveScreenshot().then (fileName) =>
         console.log do error.toString
