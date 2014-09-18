@@ -33,8 +33,6 @@ module.exports = class Runner
     do @_addCustomAction
 
   _addCustomAction: ->
-    @_wd.addPromiseChainMethod 'runNextTest', @runNextTest
-
     for action in (require 'glob').sync(__dirname+'/action/*')
       new (require action) @_wd, @_browser, @_config, @errorHandler
 
@@ -47,12 +45,12 @@ module.exports = class Runner
     console.log 'Started: ' + testFile.replace @_config.root, ''
 
     @testCase = new (require testFile) @_wd, @_browser, @_config, @errorHandler
-    @_context = do @testCase
+    @_context = @testCase
       .setContext @_context
       .runTest()
-      .fail @errorHandler
       .then => do @testCase.tearDown
-      .runNextTest
+      .fail @errorHandler
+      .then => do @runNextTest
 
     @_fileIndex++
 
