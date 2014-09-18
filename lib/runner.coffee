@@ -48,8 +48,8 @@ module.exports = class Runner
     @_context = @testCase
       .setContext @_context
       .runTest()
-      .then => do @testCase.tearDown
       .fail @errorHandler
+      .fin => do @testCase.tearDown
       .then => do @runNextTest
 
     @_fileIndex++
