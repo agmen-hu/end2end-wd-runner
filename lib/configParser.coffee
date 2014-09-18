@@ -28,7 +28,7 @@ module.exports = class ConfigParser
 
     for includePath in config.include
       includePath = @_buildPathToInclude path, includePath
-      config = extend true, {}, @_parse(includePath, included), config
+      config = extend true, {}, config, @_parse(includePath, included)
 
     delete config.include
 
