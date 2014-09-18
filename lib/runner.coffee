@@ -50,7 +50,8 @@ module.exports = class Runner
       .runTest()
       .fail @errorHandler
       .fin => do @testCase.tearDown
-      .then => do @runNextTest
+      .fail @errorHandler
+      .then @runNextTest
 
     @_fileIndex++
 
