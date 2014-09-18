@@ -136,7 +136,7 @@ The Action and the TestCase share the same sets of property
 ```
 ## Built-in actions over the wd
 
-#### ClickOnAndForElementByCss (context, clickOn, waitFor, asserter, timeout = 10000)
+#### ClickOnAndWaitForElementByCss (context, clickOn, waitFor, asserter, timeout = 10000)
 
 Shortcut for:
 ```coffeescript
