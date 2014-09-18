@@ -1,5 +1,4 @@
 # end2end-wd-runner
----
 
 ####All in end to end test runner for wd.js
 
