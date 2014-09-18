@@ -1,4 +1,4 @@
-module.exports = class ClickOnAndForElementByCss extends require '../action'
+module.exports = class ClickOnAndWaitForElementByCss extends require '../action'
   clickOnAndWaitForElementByCssAction: (context, clickOn, waitFor, asserter, timeout = 10000) ->
     asserter or= timeout
     timeout = undefined if typeof asserter is 'number'
