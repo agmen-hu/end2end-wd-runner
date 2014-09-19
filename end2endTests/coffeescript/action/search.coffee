@@ -1,4 +1,4 @@
-module.exports = class Search extends require('../../main').Action
+module.exports = class Search extends require('../../../main').Action
   # all method which is ending with Action added to the wd
   searchAction: (context, where) ->
     context

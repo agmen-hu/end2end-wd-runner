@@ -29,6 +29,7 @@ module.exports = {
   asserters: wd.asserters,
 
   // for easer vanilla js inheritance
+  createChild: createChild,
   createNewAction: function() { return createChild(Action) },
   createNewTestCase: function() { return createChild(TestCase) }
 }

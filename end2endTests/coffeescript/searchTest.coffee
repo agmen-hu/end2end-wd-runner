@@ -1,6 +1,6 @@
-module.exports = class SearchTest extends require('../main').TestCase
+module.exports = class SearchTest extends require('../../main').TestCase
   _actions: [
-    'action/search'
+    'coffeescript/action/search'
   ]
 
   test: ->

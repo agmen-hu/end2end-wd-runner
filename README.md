@@ -10,8 +10,7 @@
 
 ## Pre-requests
 
-* installed phantomjs for phantomjs driver :)
-* coffee script (at the moment...)
+* installed phantomjs for phantomjs driver
 
 ## Install
 
@@ -124,6 +123,33 @@ module.exports = class SearchTest extends require('../main').TestCase
     # must return a promise
     # the context which is returned by the test method
     do @_context.noop
+```
+
+Or if you prefer javascript:
+```javascript
+module.exports = SearchTest = require('../../main').createNewTestCase();
+// there is a createNewAction method of course :)
+
+SearchTest.prototype._actions = [
+  'action/search'
+]
+
+SearchTest.prototype.test = function()
+{
+  return this._context
+    // the first context does not have the custom actions
+    .noop()
+    .search('google')
+    .search('bing');
+}
+
+SearchTest.prototype.tearDown = function()
+{
+  console.log('search test finished');
+  // must return a promise
+  // the context which is returned by the test method
+  return this._context.noop();
+}
 ```
 
 The Action and the TestCase share the same sets of property
