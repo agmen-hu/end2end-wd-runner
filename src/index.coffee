@@ -35,22 +35,30 @@ module.exports = class Index
     @config.root = @root
 
   findTestFiles: ->
-    @testFiles = []
-    files = (require 'glob').sync @root + '**/*Test.*'
+    @testFiles = (require 'glob').sync @root + '**/*Test.*'
 
     grepRegexp = @program.grep or @config.runner.grep
-    if grepRegexp
-      grepRegexp = new RegExp grepRegexp
-      @testFiles.push file for file in files when file.replace(@root, '').match grepRegexp
-    else
-      @testFiles = files
+    @filterTests grepRegexp, 'match'
 
     excludeRegexp = if grepRegexp then undefined else @program.exclude or @config.runner.exclude
-    if excludeRegexp
-      excludeRegexp = new RegExp excludeRegexp
-      testFiles = @testFiles.filter (file) -> not file.replace(@root, '').match excludeRegexp
+    @filterTests excludeRegexp
 
-    require 'coffee-script/register' if @testFiles.some (file) -> file.match /\.coffee$/
+    do @handleCoffescript
+
+  filterTests: (regexp, match = false) ->
+    return false if not regexp
+
+    regexp = new RegExp regexp
+    @testFiles = @testFiles.filter (file) =>
+      matched = file.replace(@root, '').match regexp
+      (match and matched) or (not match and not matched)
+
+  handleCoffescript: ->
+    try
+      require 'coffee-script/register' if @testFiles.some (file) -> file.match /\.coffee$/
+    catch error
+      @filterTests '\.coffee$'
+      console.log 'Coffee tests cannot be executed with coffee-script so these tests are removed from the hit list.'
 
   createRunner: ->
     runner = new (require './runner') @testFiles, @config
