@@ -162,7 +162,7 @@ The Action and the TestCase share the same sets of property
 ```
 ## Built-in actions over the wd
 
-#### ClickOnAndWaitForElementByCss (context, clickOn, waitFor, asserter, timeout = 10000)
+#### clickOnAndWaitForElementByCss (clickOn, waitFor, asserter, timeout = 10000)
 
 Shortcut for:
 ```coffeescript
@@ -173,3 +173,5 @@ context
 ```
 
 plus the waitFor can be an object where the keys are the selectors and the values are the callbacks and the first arrived called
+
+#### waitForPopUp()
