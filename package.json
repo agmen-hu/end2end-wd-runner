@@ -27,9 +27,12 @@
     "url": "https://github.com/agmen-hu/end2end-wd-runner/issues"
   },
   "bin" : {
-    "end2end" : "./index"
+    "end2end" : "./index.js"
   },
-  "main": "./main",
+  "main": "./main.js",
+  "scripts": {
+    "toJs": "coffee -o lib -c src"
+  },
   "dependencies": {
     "commander": "~2.3.0",
     "glob": "*",
