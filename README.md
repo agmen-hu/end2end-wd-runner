@@ -162,6 +162,10 @@ The Action and the TestCase share the same sets of property
 ```
 ## Built-in actions over the wd
 
+#### waitForTheFirstElementByCss (waitFor, asserter, timeout = 10000)
+
+waitFor argument is an object where the keys are the selectors and the values are the callbacks
+
 #### clickOnAndWaitForElementByCss (clickOn, waitFor, asserter, timeout = 10000)
 
 Shortcut for:
@@ -172,6 +176,6 @@ context
     .waitForElementByCss waitFor
 ```
 
-plus the waitFor can be an object where the keys are the selectors and the values are the callbacks and the first arrived called
+When the waitFor is an object then waitForFirstElementByCss action used
 
 #### waitForPopUp()

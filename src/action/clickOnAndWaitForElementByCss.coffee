@@ -8,14 +8,17 @@ module.exports = class ClickOnAndWaitForElementByCss extends require '../action'
       .click
 
     if typeof waitFor is 'object'
-      return @_createWaitForMultipleElement context, waitFor, asserter, timeout
+      return @waitForTheFirstElementAction context, waitFor, asserter, timeout
 
     context.waitForElementByCss waitFor, asserter, timeout
 
-  _createWaitForMultipleElement: (context, waitFor, asserter, timeout) ->
+  waitForTheFirstElementAction: (context, waitFor, asserter, timeout = 2000) ->
+    asserter or= timeout
+    timeout = undefined if typeof asserter is 'number'
     selectors = Object.keys waitFor
 
     context
+      .noop()
       .then =>
         waitedElements = (@_browser.waitForElementByCss selector, asserter, timeout for selector in selectors )
         (require 'wd').Q.allSettled waitedElements
