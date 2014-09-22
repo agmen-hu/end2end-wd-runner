@@ -176,6 +176,6 @@ context
     .waitForElementByCss waitFor
 ```
 
-When the waitFor is an object then waitForFirstElementByCss action used
+When the waitFor is an object then waitForTheFirstElementByCss action used
 
 #### waitForPopUp()
