@@ -17,8 +17,8 @@ module.exports = class ConfigParser
     return false
 
   _loadYamlFile: (path) ->
-    return yml.safeLoad fs.readFileSync path, 'utf8' if fs.existsSync path
-    return {}
+    throw new Error "Config not found: #{path}" if not fs.existsSync path
+    return yml.safeLoad fs.readFileSync path, 'utf8' 
 
   _processIncludeDirective: (path, config, included) ->
     return config if not config.include
