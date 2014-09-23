@@ -16,6 +16,6 @@ module.exports =  class Envrionment
   _setupRunner: ->
     do @runner
       .setSleepOnError if @_config.browser.browserName isnt 'phantomjs' then @_config.onError.sleep else undefined
-      .setTakeScreenShotOnFail if @_config.browser.browserName isnt 'phantomjs' then @_config.onError.takeScreenShot else false
+      .setTakeScreenShotOnFail @_config.onError.takeScreenShot
       .start
 
