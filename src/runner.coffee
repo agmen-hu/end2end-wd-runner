@@ -1,17 +1,8 @@
 module.exports = class Runner
   constructor: (@_files, @_config) ->
 
-  setTakeScreenShotOnFail: (value) ->
-    @_takeScreenShotOnFail = value
-    return @
-
-  setSleepOnError: (value) ->
-    @_sleepOnError = value
-    return @
-
   start: ->
     @_fileIndex = 0;
-    @_errorCount = 0;
 
     do @_createNewContext if not @_config.runner.startTestsWithNewBrowser
     do @runNextTest
@@ -29,12 +20,13 @@ module.exports = class Runner
 
     @_browser = @_wd.promiseChainRemote if @_config.wdRemote then @_config.wdRemote else undefined
     @_context = @_browser.init @_config.browser
+    @_errorHandler = new (require './errorHandler') @_browser, @_config
 
     do @_addCustomAction
 
   _addCustomAction: ->
     for action in (require 'glob').sync(__dirname+'/action/*')
-      new (require action) @_wd, @_browser, @_config, @errorHandler
+      new (require action) @_wd, @_browser, @_config
 
   runNextTest: =>
     return do @finish if @_fileIndex >= @_files.length
@@ -44,33 +36,29 @@ module.exports = class Runner
     testFile = @_files[@_fileIndex]
     console.log '\nStarted: ' + testFile.replace @_config.root, ''
 
-    @testCase = new (require testFile) @_wd, @_browser, @_config, @errorHandler
-    @_context = @testCase
-      .setContext @_context
-      .runTest()
-      .fail @errorHandler
-      .fin => do @testCase.tearDown
-      .fail @errorHandler
+    @_testCase = new (require testFile) @_wd, @_browser, @_config
+    @_context = @_context
+      .then @_testCase.runTest
+      .then @_tearDown
+      .fail @handleError
       .then @runNextTest
 
     @_fileIndex++
 
+  _tearDown: =>
+    @_testCase
+      .runTearDown()
+      .fail (error) -> console.log "Error from tearDown: #{error}"
+
+  handleError: (error) =>
+    @_errorHandler
+      .handle error
+      .then @_tearDown
+
   finish: ->
     @_context
       .then => do @_browser.quit
-      .done => 
-        console.log '\nFinished' + if @_errorCount then " with errors count: #{@_errorCount}" else ''
-        process.exit @_errorCount
-
-  errorHandler: (error) =>
-    @_errorCount++
-
-    if @_takeScreenShotOnFail
-      @_browser.saveScreenshot().then (fileName) =>
-        console.log do error.toString
-        console.log "Screenshot from the error: #{fileName}"
-        @_browser.sleep @_sleepOnError if @_sleepOnError
-
-    else
-      console.log do error.toString
-      @_browser.sleep @_sleepOnError if @_sleepOnError
+      .done =>
+        errorCount = do @_errorHandler.getErrorCount
+        console.log '\nFinished' + if errorCount then " with errors count: #{errorCount}" else ''
+        process.exit errorCount

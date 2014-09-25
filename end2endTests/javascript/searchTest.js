@@ -4,19 +4,17 @@ SearchTest.prototype._actions = [
   'javascript/action/search'
 ]
 
+// must return a promise
 SearchTest.prototype.test = function()
 {
-  return this._context
-    // the first context does not have the custom actions
-    .noop()
+  return this._browser
     .search('google')
     .search('bing');
 }
 
+// must return a promise
 SearchTest.prototype.tearDown = function()
 {
   console.log('search test finished');
-  // must return a promise
-  // the context which is returned by the test method
-  return this._context.noop();
+  return this._browser.chain();
 }

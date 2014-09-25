@@ -3,7 +3,7 @@ module.exports =  class Selenium
     return do @_createServer if not @_config.wdRemote
 
     started = true
-    do @_setupRunner
+    do @runner.start
 
   _createServer: ->
     started = false;
@@ -14,11 +14,5 @@ module.exports =  class Selenium
 
       if not started and output.toString().match /Started.+\.Server/
         started = true
-        do @_setupRunner
-
-  _setupRunner: ->
-    do @runner
-      .setSleepOnError if @_config.browser.browserName isnt 'phantomjs' then @_config.onError.sleep else undefined
-      .setTakeScreenShotOnFail @_config.onError.takeScreenShot
-      .start
+        do @runner.start
 

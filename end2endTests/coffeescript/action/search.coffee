@@ -6,7 +6,7 @@ module.exports = class Search extends require('../../../main').Action
       .pageHasWikipediaShortcut where
 
   pageHasWikipediaShortcutAction: (context, where) ->
-    # must return a promise hence the shortcut for the browser.noop
+    # just a shortcut for the browser.noop
     return do @_nothing if where isnt 'google'
 
     context
@@ -15,4 +15,3 @@ module.exports = class Search extends require('../../../main').Action
 
   _shourtCutFound: ->
     console.log 'Page has a wikipedia shortcut'
-    do @_nothing

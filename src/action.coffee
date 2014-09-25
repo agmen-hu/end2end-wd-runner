@@ -1,5 +1,5 @@
 module.exports = class Base
-  constructor: (wd, @_browser, @_config, @errorHandler) ->
+  constructor: (wd, @_browser, @_config) ->
     self = @;
     for property of self
       actionMethodName = property.match /(.+)Action$/

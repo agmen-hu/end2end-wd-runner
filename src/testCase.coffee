@@ -1,16 +1,25 @@
+Q = (require 'wd').Q
+
 module.exports = class TestCase
   _actions: []
 
-  constructor: (wd, @_browser, @_config, @errorHandler) ->
-    new (require @_config.root + action) wd, @_browser, @_config, @errorHandler for action in @_actions
+  constructor: (wd, @_browser, @_config) ->
+    new (require @_config.root + action) wd, @_browser, @_config for action in @_actions
 
-  setContext: (value) ->
-    @_context = value
-    return @
+  runTest: => do @test
 
-  runTest: ->
-    @_context = do @test
+  test: -> do @_browser.chain
 
-  test: -> @_context
+  runTearDown: ->
+    deferred = do Q.defer
 
-  tearDown: -> @_context
+    try
+      @tearDown()
+      .then deferred.resolve
+      .fail deferred.reject
+    catch error
+      deferred.reject error
+
+    return deferred.promise
+
+  tearDown: -> do @_browser.chain

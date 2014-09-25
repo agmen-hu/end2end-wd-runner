@@ -3,15 +3,13 @@ module.exports = class SearchTest extends require('../../main').TestCase
     'coffeescript/action/search'
   ]
 
+  # must return a promise
   test: ->
-    @_context
-      # the first context does not have the custom actions
-      .noop()
+    @_browser
       .search 'google'
       .search 'bing'
 
+  # must return a promise
   tearDown: ->
     console.log 'search test finished'
-    # must return a promise
-    # the context which is returned by the test method
-    do @_context.noop
+    do @_browser.chain

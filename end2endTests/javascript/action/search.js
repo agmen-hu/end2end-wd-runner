@@ -10,21 +10,19 @@ Search.prototype.searchAction = function(context, where)
 
 Search.prototype.pageHasWikipediaShortcutAction = function(context, where)
 {
-  // must return a promise hence the shortcut for the browser.noop
   if (where != 'google') {
-    return this._nothing();
+    return false;
   }
 
   $this = this;
   return context
       .hasElementById('rcnt')
       .then(function(exists){
-        return exists ? $this._shourtCutFound() : $this._nothing();
+        return exists ? $this._shourtCutFound() : false;
       });
 }
 
 Search.prototype._shourtCutFound = function()
 {
   console.log('Page has a wikipedia shortcut');
-  return this._nothing();
 }
