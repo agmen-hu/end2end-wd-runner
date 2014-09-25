@@ -1,4 +1,4 @@
-module.exports =  class Envrionment
+module.exports =  class Selenium
   constructor: (@runner, @_config) ->
     return do @_createServer if not @_config.wdRemote
 
@@ -7,8 +7,11 @@ module.exports =  class Envrionment
 
   _createServer: ->
     started = false;
-    server = (require 'selenium-standalone') stdio: null
+    server = (require 'selenium-standalone') stdio: null, @_config.selenium.arguments
+    showLog = @_config.selenium.showLog
     server.stderr.on 'data', (output) =>
+      console.log do output.toString if showLog
+
       if not started and output.toString().match /Started.+\.Server/
         started = true
         do @_setupRunner

@@ -1,3 +1,8 @@
+selenium:
+  showLog: false
+  # passthrough as selenium call arguments
+  arguments: []
+
 # passthrough for the wd.promiseChainRemote
 wdRemote: ~
 
