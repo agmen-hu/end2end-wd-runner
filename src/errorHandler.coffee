@@ -1,6 +1,10 @@
 module.exports = class ErrorHandler
-  constructor: (@_browser, @_config) ->
+  constructor: (@_config) ->
     @_errorCount = 0;
+
+  setBrowser: (browser) ->
+    @_browser = browser
+    return @
 
   getErrorCount: -> @_errorCount
 

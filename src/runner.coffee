@@ -1,5 +1,6 @@
 module.exports = class Runner
   constructor: (@_files, @_config) ->
+    @_errorHandler = new (require './errorHandler') @_config
 
   start: ->
     @_fileIndex = 0;
@@ -20,7 +21,8 @@ module.exports = class Runner
 
     @_browser = @_wd.promiseChainRemote if @_config.wdRemote then @_config.wdRemote else undefined
     @_context = @_browser.init @_config.browser
-    @_errorHandler = new (require './errorHandler') @_browser, @_config
+
+    @_errorHandler.setBrowser @_browser
 
     do @_addCustomAction
 
