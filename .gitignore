@@ -1,2 +1,4 @@
 node_modules
+phantomjsdriver.log
 lib
+.c9
