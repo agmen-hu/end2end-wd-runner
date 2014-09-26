@@ -43,6 +43,7 @@ wdRemote: ~
 browser:
   browserName: 'firefox'
 onError:
+  startNewBrowser: false
   takeScreenShot: false
   sleep: 0
 runner:

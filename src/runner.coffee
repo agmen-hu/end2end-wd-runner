@@ -9,6 +9,8 @@ module.exports = class Runner
     do @runNextTest
 
   _createNewContext: ->
+    return true if @_freshContext
+    
     do @_browser.quit if @_browser
 
     @_wd = require 'wd'
@@ -21,7 +23,8 @@ module.exports = class Runner
 
     @_browser = @_wd.promiseChainRemote if @_config.wdRemote then @_config.wdRemote else undefined
     @_context = @_browser.init @_config.browser
-
+    @_freshContext = true
+    
     @_errorHandler.setBrowser @_browser
 
     do @_addCustomAction
@@ -38,6 +41,7 @@ module.exports = class Runner
     testFile = @_files[@_fileIndex]
     console.log '\nStarted: ' + testFile.replace @_config.root, ''
 
+    @_freshContext = false
     @_testCase = new (require testFile) @_wd, @_browser, @_config
     @_context = @_context
       .then @_testCase.runTest
@@ -50,12 +54,16 @@ module.exports = class Runner
   _tearDown: =>
     @_testCase
       .runTearDown()
-      .fail (error) -> console.log "Error from tearDown: #{error}"
+      .fail (error) => 
+        console.log "Error from tearDown: #{error}"
+        do @_createNewContext if @_config.onError.startNewBrowser
 
   handleError: (error) =>
     @_errorHandler
       .handle error
       .then @_tearDown
+      .then =>
+        do @_createNewContext if @_config.onError.startNewBrowser
 
   finish: ->
     @_context
