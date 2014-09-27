@@ -26,6 +26,7 @@ module.exports = class ErrorHandler
     @_errorIsOccured = true
 
     return @_browser.sleep @_config.onError.sleep if @_config.onError.sleep
+    do (require './readLine').pauseUntilAnyKey if @_config.onError.pause
 
   handleTearDown: (error) =>
     console.log "Error from tearDown: #{error}"

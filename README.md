@@ -45,6 +45,7 @@ browser:
 onError:
   startNewBrowser: false
   takeScreenShot: false
+  pause: false
   sleep: 0
 runner:
   grep: ''
