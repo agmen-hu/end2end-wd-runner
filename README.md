@@ -113,18 +113,14 @@ module.exports = class SearchTest extends require('../main').TestCase
     'action/search'
   ]
 
+  # a promise must be returned
   test: ->
-    @_context
-      # the first context does not have the custom actions
-      .noop()
+    @_browser
       .search 'google'
       .search 'bing'
 
   tearDown: ->
     console.log 'search test finished'
-    # must return a promise
-    # the context which is returned by the test method
-    do @_context.noop
 ```
 
 Or if you prefer javascript:
@@ -136,11 +132,10 @@ SearchTest.prototype._actions = [
   'action/search'
 ]
 
+// a promise must be returned
 SearchTest.prototype.test = function()
 {
-  return this._context
-    // the first context does not have the custom actions
-    .noop()
+  return this._browser
     .search('google')
     .search('bing');
 }
@@ -148,9 +143,6 @@ SearchTest.prototype.test = function()
 SearchTest.prototype.tearDown = function()
 {
   console.log('search test finished');
-  // must return a promise
-  // the context which is returned by the test method
-  return this._context.noop();
 }
 ```
 
@@ -173,9 +165,9 @@ waitFor argument is an object where the keys are the selectors and the values ar
 Shortcut for:
 ```coffeescript
 context
-    .elementByCss clickOn, asserter, timout
+    .elementByCss clickOn
     .click()
-    .waitForElementByCss waitFor
+    .waitForElementByCss waitFor, asserter, timout
 ```
 
 When the waitFor is an object then waitForTheFirstElementByCss action used
