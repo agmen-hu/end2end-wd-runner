@@ -1,5 +1,5 @@
 module.exports = class ErrorHandler
-  constructor: (@_config) ->
+  constructor: (@_config, @logger) ->
     @_errorCount = 0;
 
   setBrowser: (browser) -> @_browser = browser
@@ -13,12 +13,12 @@ module.exports = class ErrorHandler
   handle: (error) =>
     if @_config.onError.takeScreenShot
       @_browser.saveScreenshot().then (fileName) =>
-        console.log do error.toString
-        console.log "Screenshot from the error: #{fileName}"
+        @logger.error do error.toString
+        @logger.error "Screenshot from the error: #{fileName}"
         do @_handleError
 
     else
-      console.log do error.toString
+      @logger.error do error.toString
       do @_handleError
 
   _handleError: (error) ->
@@ -29,5 +29,5 @@ module.exports = class ErrorHandler
     do (require './readLine').pauseUntilAnyKey if @_config.onError.pause
 
   handleTearDown: (error) =>
-    console.log "Error from tearDown: #{error}"
+    @logger.error "Error from tearDown: #{error}"
     do @_handleError

@@ -42,6 +42,12 @@ wdRemote: ~
 # passthrough for the wd.browser.init
 browser:
   browserName: 'firefox'
+logger:
+  # absolute path, relative from the root or relative from the module
+  class: 'lib/logger.js'
+  # passthrough to the logger constructor
+  config:
+    level: 'info'
 onError:
   startNewBrowser: false
   takeScreenShot: false
@@ -101,7 +107,7 @@ module.exports = class Search extends require('../../main').Action
       .then (exists) => if exists then do @_shourtCutFound else do @_nothing
 
   _shourtCutFound: ->
-    console.log 'Page has a wikipedia shortcut'
+    @logger.info 'Page has a wikipedia shortcut'
     do @_nothing
 ```
 
@@ -120,7 +126,7 @@ module.exports = class SearchTest extends require('../main').TestCase
 
   # a promise must be returned
   tearDown: ->
-    console.log 'search test finished'
+    @logger.log 'info', search test finished'
     do @_browser.chain
 ```
 
@@ -144,7 +150,7 @@ SearchTest.prototype.test = function()
 // a promise must be returned
 SearchTest.prototype.tearDown = function()
 {
-  console.log('search test finished');
+  this.logger.info('search test finished');
   this._browser.chain();
 }
 ```

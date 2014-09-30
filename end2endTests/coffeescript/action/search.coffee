@@ -14,4 +14,4 @@ module.exports = class Search extends require('../../../main').Action
       .then (exists) => if exists then do @_shourtCutFound else do @_nothing
 
   _shourtCutFound: ->
-    console.log 'Page has a wikipedia shortcut'
+    @logger.info 'Page has a wikipedia shortcut'

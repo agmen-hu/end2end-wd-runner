@@ -1,5 +1,5 @@
 module.exports = class Base
-  constructor: (wd, @_browser, @_config) ->
+  constructor: (wd, @_browser, @_config, @logger) ->
     self = @;
     for property of self
       actionMethodName = property.match /(.+)Action$/
@@ -8,7 +8,7 @@ module.exports = class Base
           actionMethodName[1],
           do (property, actionMethodName) ->->
             args = Array::slice.call arguments
-            console.log "#{actionMethodName[1]} called" + if arguments.length then " with #{args}" else ''
+            self.logger.info "#{actionMethodName[1]} called" + if arguments.length then " with #{args}" else ''
             args.splice 0, 0, @
             self[property].apply self, args
         )

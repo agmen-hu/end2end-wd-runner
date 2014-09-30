@@ -6,6 +6,7 @@ module.exports = class Index
     do @findRoot
     do @loadConfig
     do @extendConfig
+    do @createLogger
     do @findTestFiles
     do @createRunner
 
@@ -34,6 +35,18 @@ module.exports = class Index
     @config.browser.browserName = @program.browser or @config.browser.browserName
     @config.root = @root
 
+  createLogger: ->
+    path = @config.logger.class
+    if path[0] isnt '/' and path[1] isnt ':'
+      fs = require 'fs'
+      if fs.existsSync @root + path
+        path = @root + path
+      else if fs.existsSync __dirname + '/../' + path
+        path = __dirname + '/../' + path
+
+    require 'coffee-script/register' if path.match /\.coffee$/
+    @logger = new (require path) @config.logger.config
+
   findTestFiles: ->
     @testFiles = (require 'glob').sync @root + '**/*Test.*'
 
@@ -58,8 +71,8 @@ module.exports = class Index
       require 'coffee-script/register' if @testFiles.some (file) -> file.match /\.coffee$/
     catch error
       @filterTests '\.coffee$'
-      console.log 'Coffee tests cannot be executed with coffee-script so these tests are removed from the hit list.'
+      @logger.warn 'Coffee tests cannot be executed with coffee-script so these tests are removed from the hit list.'
 
   createRunner: ->
-    runner = new (require './runner') @testFiles, @config
-    selenium = new (require './selenium') runner, @config
+    runner = new (require './runner') @testFiles, @config, @logger
+    selenium = new (require './selenium') runner, @config, @logger

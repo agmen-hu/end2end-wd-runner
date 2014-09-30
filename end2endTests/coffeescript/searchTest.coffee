@@ -11,5 +11,5 @@ module.exports = class SearchTest extends require('../../main').TestCase
 
   # must return a promise
   tearDown: ->
-    console.log 'search test finished'
+    @logger.info 'search test finished'
     do @_browser.chain

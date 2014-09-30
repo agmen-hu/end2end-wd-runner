@@ -1,6 +1,6 @@
 module.exports = class Runner
-  constructor: (@_files, @_config) ->
-    @_errorHandler = new (require './errorHandler') @_config
+  constructor: (@_files, @_config, @logger) ->
+    @_errorHandler = new (require './errorHandler') @_config, @logger
 
   start: ->
     @_fileIndex = 0;
@@ -31,7 +31,7 @@ module.exports = class Runner
 
   _addCustomAction: ->
     for action in (require 'glob').sync(__dirname+'/action/*')
-      new (require action) @_wd, @_browser, @_config
+      new (require action) @_wd, @_browser, @_config, @logger
 
   runNextTest: =>
     return do @_finish if @_fileIndex >= @_files.length
@@ -52,12 +52,12 @@ module.exports = class Runner
 
   _createNextTestCase: ->
     testFile = @_files[@_fileIndex++]
-    console.log '\nStarted: ' + testFile.replace @_config.root, ''
+    @logger.info '\nStarted: ' + testFile.replace @_config.root, ''
 
     do @_errorHandler.init
     @_freshContext = false
 
-    @_testCase = new (require testFile) @_wd, @_browser, @_config
+    @_testCase = new (require testFile) @_wd, @_browser, @_config, @logger
 
   _tearDown: =>
     @_testCase
@@ -69,5 +69,7 @@ module.exports = class Runner
       .then => do @_browser.quit
       .done =>
         errorCount = do @_errorHandler.getErrorCount
-        console.log '\nFinished' + if errorCount then " with error count: #{errorCount}" else ''
+        @logger.log(
+          if errorCount then 'error' else 'info',
+          '\nFinished' + if errorCount then " with error count: #{errorCount}" else '')
         process.exit errorCount

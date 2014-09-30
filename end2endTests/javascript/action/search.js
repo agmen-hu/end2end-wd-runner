@@ -24,5 +24,5 @@ Search.prototype.pageHasWikipediaShortcutAction = function(context, where)
 
 Search.prototype._shourtCutFound = function()
 {
-  console.log('Page has a wikipedia shortcut');
+  this.logger.info('Page has a wikipedia shortcut');
 }

@@ -10,6 +10,13 @@ wdRemote: ~
 browser:
   browserName: 'firefox'
 
+logger:
+  # absolute path, relative from the root or relative from the module
+  class: 'lib/logger.js'
+  # passthrough to the logger constructor
+  config:
+    level: 'info'
+
 onError:
   startNewBrowser: false
   takeScreenShot: false

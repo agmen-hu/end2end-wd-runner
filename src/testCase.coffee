@@ -3,8 +3,8 @@ Q = (require 'wd').Q
 module.exports = class TestCase
   _actions: []
 
-  constructor: (wd, @_browser, @_config) ->
-    new (require @_config.root + action) wd, @_browser, @_config for action in @_actions
+  constructor: (wd, @_browser, @_config, @logger) ->
+    new (require @_config.root + action) wd, @_browser, @_config, @logger for action in @_actions
 
   runTest: => do @test
 

@@ -15,6 +15,6 @@ SearchTest.prototype.test = function()
 // must return a promise
 SearchTest.prototype.tearDown = function()
 {
-  console.log('search test finished');
+  this.logger.info('search test finished');
   return this._browser.chain();
 }
