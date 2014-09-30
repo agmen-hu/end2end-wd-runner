@@ -37,6 +37,7 @@
     "commander": "~2.3.0",
     "glob": "*",
     "extend": "*",
+    "colors": "*",
     "js-yaml": "*",
     "wd": "0.3.*",
     "chai": "1.9.*",

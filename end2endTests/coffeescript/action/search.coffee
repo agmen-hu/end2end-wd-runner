@@ -3,6 +3,7 @@ module.exports = class Search extends require('../../../main').Action
   searchAction: (context, where) ->
     context
       .get @_config.urls[where] + @_config.search.forWhat
+      .then => @logger.debug 'url loaded', url: @_config.urls[where], what: @_config.search.forWhat
       .pageHasWikipediaShortcut where
 
   pageHasWikipediaShortcutAction: (context, where) ->
