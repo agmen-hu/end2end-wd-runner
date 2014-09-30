@@ -29,8 +29,12 @@ end2end
 end2end -r other/root/folder
 ```
 ```
-# for more :)
-end2end --help
+# all options
+-r --root <directory>                    root directory for text search. Default is end2endTests
+-c --config <path>                       path to config yml. Default is root/config.yml
+-b --browser <firefox|chrome|phantomjs>  Default is come from the config
+-g --grep <pattern>                      regexp matcher for wich tests being executed
+-e --exclude <pattern>                   regexp matcher for wich tests being excluded. Default is manually
 ```
 
 ## Configuration
