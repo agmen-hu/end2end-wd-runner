@@ -94,7 +94,6 @@ module.exports = class Search extends require('../../main').Action
       .pageHasWikipediaShortcut where
 
   pageHasWikipediaShortcutAction: (context, where) ->
-    # must return a promise hence the shortcut for the browser.noop
     return do @_nothing if where isnt 'google'
 
     context
@@ -119,8 +118,10 @@ module.exports = class SearchTest extends require('../main').TestCase
       .search 'google'
       .search 'bing'
 
+  # a promise must be returned
   tearDown: ->
     console.log 'search test finished'
+    do @_browser.chain
 ```
 
 Or if you prefer javascript:
@@ -140,9 +141,11 @@ SearchTest.prototype.test = function()
     .search('bing');
 }
 
+// a promise must be returned
 SearchTest.prototype.tearDown = function()
 {
   console.log('search test finished');
+  this._browser.chain();
 }
 ```
 
