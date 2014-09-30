@@ -18,6 +18,7 @@ logger:
     level: 'info'
 
 onError:
+  collectLogsFromBrowser: true
   startNewBrowser: false
   takeScreenShot: false
   pause: false

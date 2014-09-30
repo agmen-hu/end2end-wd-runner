@@ -1,6 +1,7 @@
 module.exports = class ErrorHandler
   constructor: (@_config, @logger) ->
     @_errorCount = 0;
+    @_browserLogCollector = new (require './browserLogCollector') @logger
 
   setBrowser: (browser) -> @_browser = browser
 
@@ -25,8 +26,12 @@ module.exports = class ErrorHandler
     @_errorCount++
     @_errorIsOccured = true
 
-    return @_browser.sleep @_config.onError.sleep if @_config.onError.sleep
-    do (require './readLine').pauseUntilAnyKey if @_config.onError.pause
+    context = if @_config.onError.collectLogsFromBrowser then @_browserLogCollector.collect @_browser else do @_browser.noop
+    context = if @_config.onError.sleep then context.sleep @_config.onError.sleep else context
+
+    return context if @_config.onError.sleep or not @_config.onError.pause
+
+    context.then -> do (require './readLine').pauseUntilAnyKey
 
   handleTearDown: (error) =>
     @logger.error "Error from tearDown: #{error}"

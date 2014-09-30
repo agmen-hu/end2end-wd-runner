@@ -49,9 +49,13 @@ logger:
   config:
     level: 'info'
 onError:
+  # collect console logs from the browser with the same level trashold as the logger
+  collectLogsFromBrowser: true
   startNewBrowser: false
   takeScreenShot: false
+  # pause until a key pressed
   pause: false
+  # sleep x millisecond
   sleep: 0
 runner:
   grep: ''
