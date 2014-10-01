@@ -9,7 +9,7 @@ module.exports = class ClickOnAndWaitForElementByCss extends require '../action'
       .click
 
     if typeof waitFor is 'object'
-      return @waitForTheFirstElementAction context, waitFor, asserter, timeout
+      return @waitForTheFirstElementByCssAction context, waitFor, asserter, timeout
 
     context.waitForElementByCss waitFor, asserter, timeout
 
