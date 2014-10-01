@@ -118,7 +118,6 @@ module.exports = class Search extends require('end2end-wd-runner').Action
 
   _shourtCutFound: ->
     @logger.info 'Page has a wikipedia shortcut'
-    do @_nothing
 ```
 
 TestCase
