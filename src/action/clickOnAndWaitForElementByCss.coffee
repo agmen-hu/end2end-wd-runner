@@ -1,5 +1,6 @@
+{Q} = require '../../main'
 module.exports = class ClickOnAndWaitForElementByCss extends require '../action'
-  clickOnAndWaitForElementByCssAction: (context, clickOn, waitFor, asserter, timeout = 10000) ->
+  clickOnAndWaitForElementByCssAction: (context, clickOn, waitFor, asserter, timeout) ->
     asserter or= timeout
     timeout = undefined if typeof asserter is 'number'
 
@@ -12,20 +13,26 @@ module.exports = class ClickOnAndWaitForElementByCss extends require '../action'
 
     context.waitForElementByCss waitFor, asserter, timeout
 
-  waitForTheFirstElementAction: (context, waitFor, asserter, timeout = 2000) ->
+  waitForTheFirstElementByCssAction: (context, waitFor, asserter, timeout) ->
     asserter or= timeout
     timeout = undefined if typeof asserter is 'number'
     selectors = Object.keys waitFor
+    deferred = do Q.defer
 
     context
       .noop()
       .then =>
-        waitedElements = (@_browser.waitForElementByCss selector, asserter, timeout for selector in selectors )
-        (require 'wd').Q.allSettled waitedElements
-      .then (states) ->
-        for result, index in states
-          if result.state is 'fulfilled'
-            return do waitFor[selectors[index]]
+        for selector in selectors
+          @_browser
+            .waitForElementByCss selector, asserter, timeout
+            .then (do (selector) ->->
+              return true if not deferred.promise.isPending()
+              deferred.resolve selector)
 
-        throw new Error "Not found any of the requested elements: #{selectors}"
+            .fail ->
+              return true if not deferred.promise.isPending()
+              do deferred.reject
 
+    deferred.promise
+      .fail -> throw new Error "Not found any of the requested elements: #{selectors}"
+      .then (selector) -> do waitFor[selector]
