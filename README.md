@@ -42,6 +42,7 @@ end2end -r other/root/folder
 defaults
 ```yml
 # passthrough for the wd.promiseChainRemote
+# when it is not null the built in selenium does not started
 wdRemote: ~
 # passthrough for the wd.browser.init
 browser:
@@ -54,7 +55,7 @@ logger:
     level: 'info'
 onError:
   # collect console logs from the browser with the same level trashold as the logger
-  collectLogsFromBrowser: true
+  collectLogsFromBrowser: false
   startNewBrowser: false
   takeScreenShot: false
   # pause until a key pressed
