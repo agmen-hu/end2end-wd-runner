@@ -1,10 +1,12 @@
 module.exports = class Runner
   constructor: (@_files, @_config, @logger) ->
     @_errorHandler = new (require './errorHandler') @_config, @logger
+    @_timer = new (require './timer')()
 
   start: ->
     @_fileIndex = 0;
 
+    do @_timer.start
     do @_createNewContext if not @_config.runner.startTestsWithNewBrowser
     do @runNextTest
 
@@ -44,6 +46,8 @@ module.exports = class Runner
       .fail @_errorHandler.handle
       .then @_tearDown
       .then =>
+        @logger.info "TestCase finished in #{do @_timer.getTime} sec"
+
         return true if not @_errorHandler.errorIsOccured()
         do @_createNewContext if @_config.onError.startNewBrowser
       .then @runNextTest
@@ -71,5 +75,5 @@ module.exports = class Runner
         errorCount = do @_errorHandler.getErrorCount
         @logger.log(
           if errorCount then 'error' else 'info',
-          '\nFinished' + if errorCount then " with error count: #{errorCount}" else '')
+          "\nFinished in #{do @_timer.getOverall} sec " + if errorCount then " with error count: #{errorCount}" else '')
         process.exit errorCount
