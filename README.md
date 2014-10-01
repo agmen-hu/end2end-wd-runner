@@ -100,14 +100,16 @@ end2end -c production.yml
 end2end use the wd with promise chains so the Actions basically a set of methods for promise chain.
 
 ```coffeescript
-module.exports = class Search extends require('../../main').Action
+module.exports = class Search extends require('end2end-wd-runner').Action
   # all method which is ending with Action added to the wd
   searchAction: (context, where) ->
     context
       .get @_config.urls[where] + @_config.search.forWhat
+      .then => @logger.debug 'url loaded', url: @_config.urls[where], what: @_config.search.forWhat
       .pageHasWikipediaShortcut where
 
   pageHasWikipediaShortcutAction: (context, where) ->
+    # @_nothing is a shortcut for browser.noop
     return do @_nothing if where isnt 'google'
 
     context
@@ -121,7 +123,7 @@ module.exports = class Search extends require('../../main').Action
 
 TestCase
 ```coffeescript
-module.exports = class SearchTest extends require('../main').TestCase
+module.exports = class SearchTest extends require('end2end-wd-runner').TestCase
   _actions: [
     'action/search'
   ]
@@ -134,14 +136,14 @@ module.exports = class SearchTest extends require('../main').TestCase
 
   # a promise must be returned
   tearDown: ->
-    @logger.log 'info', search test finished'
+    @logger.info 'search test finished'
     do @_browser.chain
 ```
 
-Or if you prefer javascript:
+If you prefer javascript:
 ```javascript
-module.exports = SearchTest = require('../../main').createNewTestCase();
-// there is a createNewAction method of course :)
+module.exports = SearchTest = require('end2end-wd-runner').createNewTestCase();
+// there is also available a createNewAction method
 
 SearchTest.prototype._actions = [
   'action/search'
@@ -168,16 +170,18 @@ The Action and the TestCase share the same sets of property
 @_config
 # the wd browser
 @_browser
+# Simple logger for console with debug/info/warn/error methods
+@logger
 # callback for the deeper promise chain error handling
 @errorHandler
 ```
 ## Built-in actions over the wd
 
-#### waitForTheFirstElementByCss (waitFor, asserter, timeout = 10000)
+#### waitForTheFirstElementByCss (waitFor, asserter, timeout)
 
 waitFor argument is an object where the keys are the selectors and the values are the callbacks
 
-#### clickOnAndWaitForElementByCss (clickOn, waitFor, asserter, timeout = 10000)
+#### clickOnAndWaitForElementByCss (clickOn, waitFor, asserter, timeout)
 
 Shortcut for:
 ```coffeescript
