@@ -75,5 +75,5 @@ module.exports = class Runner
         errorCount = do @_errorHandler.getErrorCount
         @logger.log(
           if errorCount then 'error' else 'info',
-          "\nFinished in #{do @_timer.getOverall} sec " + if errorCount then " with error count: #{errorCount}" else '')
+          "\nFinished in #{do @_timer.getOverall} sec" + if errorCount then " with error count: #{errorCount}" else '')
         process.exit errorCount
