@@ -49,7 +49,7 @@ module.exports = class Runner
         @logger.info "TestCase finished in #{do @_timer.getTime} sec"
 
         return true if not @_errorHandler.errorIsOccured()
-        do @_createNewContext if @_config.onError.startNewBrowser
+        do @_createNewContext if @_config.onError.startNewBrowser and @_fileIndex < @_files.length
       .then @runNextTest
 
     return undefined
