@@ -6,7 +6,8 @@
 * includeable yml configuration
 * tearDownable testcases
 * custom actions for the readable tests
-* included selenium with firefox, chrome and phantomjs driver
+* included selenium-standalone module with firefox, chrome and phantomjs driver
+  (this will be installed only after the first run is detect that is missing)
 
 ## Pre-requests
 

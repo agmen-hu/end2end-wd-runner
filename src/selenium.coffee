@@ -1,20 +1,47 @@
+{Q} = require 'wd'
+
 module.exports =  class Selenium
-  constructor: (@runner, @_config, @logger) ->
+  constructor: (@_config, @logger) ->
+
+  start: ->
     return do @_createServer if not @_config.wdRemote
 
-    started = true
-    do @runner.start
+    @started = true
+    do Q
 
   _createServer: ->
-    started = false;
+    @_ensureServerIsInstalled()
+      .then @_startServer
+
+  _ensureServerIsInstalled: ->
+    try
+      require 'selenium-standalone'
+      do Q
+    catch err
+      @logger.warn 'Selenium standalone is missing'
+      do @_installServer
+
+  _installServer: ->
+    @logger.warn "Now will be install here: #{do process.cwd}/node_modules"
+    deferred = do Q.defer
+    proc = require('child_process').spawn 'npm', ['install', 'selenium-standalone']
+    proc.on 'close', (exitCode) ->
+      if not exitCode then do deferred.resolve else deferred.reject exitCode
+
+    deferred.promise
+
+  _startServer: =>
+    deferred = do Q.defer
     server = (require 'selenium-standalone') stdio: null, @_config.selenium.arguments
     showLog = @_config.selenium.showLog
     server.stderr.on 'data', (output) =>
       @_log output if showLog
 
-      if not started and output.toString().match /Started.+\.Server/
-        started = true
-        do @runner.start
+      if not @started and output.toString().match /Started.+\.Server/
+        @started = true
+        do deferred.resolve
+
+    deferred.promise
 
   _log: (buffer) ->
     line = do buffer.toString

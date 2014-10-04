@@ -74,5 +74,9 @@ module.exports = class Index
       @logger.warn 'Coffee tests cannot be executed with coffee-script so these tests are removed from the hit list.'
 
   createRunner: ->
-    runner = new (require './runner') @testFiles, @config, @logger
-    selenium = new (require './selenium') runner, @config, @logger
+    selenium = new (require './selenium') @config, @logger
+    selenium
+      .start()
+      .then =>
+        runner = new (require './runner') @testFiles, @config, @logger
+        do runner.start
