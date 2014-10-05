@@ -47,8 +47,7 @@ module.exports = class Index
       .start()
       .then =>
         fileFinder = new (require './fileFinder')
-        fileFinder.setLogger @logger
-        fileFinder.setConfig @config
+        fileFinder.init @config, @logger
         runner = new (require './testCaseRunner') do fileFinder.findTestFiles, @config, @logger
         do runner.start
       .fail (error) =>

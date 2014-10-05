@@ -2,19 +2,17 @@ module.exports = class FileFinder
   constructor: ->
     @coffeeIsRegistred = false
 
-  setConfig: (config) ->
-    @config = config
-
-  setLogger: (logger) ->
+  init: (config, logger) ->
+    @_config = config
     @logger = logger
 
   findTestFiles: ->
-    @_testFiles = (require 'glob').sync @config.root + '**/*Test.*'
+    @_testFiles = (require 'glob').sync @_config.root + '**/*Test.*'
 
-    grepRegexp = @config.runner.grep
+    grepRegexp = @_config.runner.grep
     @_filterTests grepRegexp, 'match'
 
-    excludeRegexp = if grepRegexp then undefined else @config.runner.exclude
+    excludeRegexp = if grepRegexp then undefined else @_config.runner.exclude
     @_filterTests excludeRegexp
 
     do @_handleCoffescript if not @coffeeIsRegistred
@@ -26,7 +24,7 @@ module.exports = class FileFinder
 
     regexp = new RegExp regexp
     @_testFiles = @_testFiles.filter (file) =>
-      matched = file.replace(@config.root, '').match regexp
+      matched = file.replace(@_config.root, '').match regexp
       (match and matched) or (not match and not matched)
 
   _handleCoffescript: ->
