@@ -7,7 +7,6 @@ module.exports = class Index
     do @loadConfig
     do @extendConfig
     do @createLogger
-    do @findTestFiles
     do @createRunner
 
   processsArgv: ->
@@ -32,7 +31,9 @@ module.exports = class Index
     @config = configParser.load configPath, @config
 
   extendConfig: ->
-    @config.browser.browserName = @program.browser or @config.browser.browserName
+    @config.browser.browserName or= @program.browser
+    @config.runner.exclude or= @program.exclude
+    @config.runner.grep or= @program.grep
     @config.root = @root
 
   createLogger: ->
@@ -47,36 +48,15 @@ module.exports = class Index
     require 'coffee-script/register' if path.match /\.coffee$/
     @logger = new (require path) @config.logger.config
 
-  findTestFiles: ->
-    @testFiles = (require 'glob').sync @root + '**/*Test.*'
-
-    grepRegexp = @program.grep or @config.runner.grep
-    @filterTests grepRegexp, 'match'
-
-    excludeRegexp = if grepRegexp then undefined else @program.exclude or @config.runner.exclude
-    @filterTests excludeRegexp
-
-    do @handleCoffescript
-
-  filterTests: (regexp, match = false) ->
-    return false if not regexp
-
-    regexp = new RegExp regexp
-    @testFiles = @testFiles.filter (file) =>
-      matched = file.replace(@root, '').match regexp
-      (match and matched) or (not match and not matched)
-
-  handleCoffescript: ->
-    try
-      require 'coffee-script/register' if @testFiles.some (file) -> file.match /\.coffee$/
-    catch error
-      @filterTests '\.coffee$'
-      @logger.warn 'Coffee tests cannot be executed with coffee-script so these tests are removed from the hit list.'
-
   createRunner: ->
     selenium = new (require './selenium') @config, @logger
     selenium
       .start()
       .then =>
-        runner = new (require './runner') @testFiles, @config, @logger
+        fileFinder = new (require './fileFinder')
+        fileFinder.setLogger @logger
+        fileFinder.setConfig @config
+        runner = new (require './testCaseRunner') do fileFinder.findTestFiles, @config, @logger
         do runner.start
+      .fail (error) =>
+        @logger.error "Selenium exited with code: #{error}"

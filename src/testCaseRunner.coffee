@@ -1,4 +1,4 @@
-module.exports = class Runner
+module.exports = class TestCaseRunner
   constructor: (@_files, @_config, @logger) ->
     @_errorHandler = new (require './errorHandler') @_config, @logger
     @_timer = new (require './timer')()
