@@ -37,16 +37,9 @@ module.exports = class Index
     @config.root = @root
 
   createLogger: ->
-    path = @config.logger.class
-    if path[0] isnt '/' and path[1] isnt ':'
-      fs = require 'fs'
-      if fs.existsSync @root + path
-        path = @root + path
-      else if fs.existsSync __dirname + '/../' + path
-        path = __dirname + '/../' + path
-
-    require 'coffee-script/register' if path.match /\.coffee$/
-    @logger = new (require path) @config.logger.config
+    loggerFactory = new (require './loggerFactory')
+    loggerFactory.setConfig @config
+    @logger = do loggerFactory.create
 
   createRunner: ->
     selenium = new (require './selenium') @config, @logger
