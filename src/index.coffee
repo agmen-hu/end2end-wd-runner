@@ -20,7 +20,7 @@ module.exports = class Index
 
   findRoot: ->
     @root = if @program.root then @program.root else 'end2endTests'
-    @root = do process.cwd + '/' + @root if @root.indexOf '/' isnt -1
+    @root = do process.cwd + '/' + @root if @root[0] isnt '/' and @root[1] isnt ':'
     @root += '/'
 
   loadConfig: ->
