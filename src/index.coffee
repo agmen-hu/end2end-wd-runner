@@ -42,13 +42,14 @@ module.exports = class Index
     @logger = do loggerFactory.create
 
   createRunner: ->
-    selenium = new (require './selenium') @config, @logger
-    selenium
+    new (require './selenium') @config, @logger
       .start()
       .then =>
         fileFinder = new (require './fileFinder')
         fileFinder.init @config, @logger
-        runner = new (require './testCaseRunner') do fileFinder.findTestFiles, @config, @logger
+        contextBuilder = new (require './contextBuilder')
+        contextBuilder.init @config, @logger
+        runner = new (require './testCaseRunner') do fileFinder.findTestFiles, contextBuilder, @config, @logger
         do runner.start
       .fail (error) =>
         @logger.error "Selenium exited with code: #{error}"

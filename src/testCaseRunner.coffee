@@ -1,5 +1,5 @@
 module.exports = class TestCaseRunner
-  constructor: (@_files, @_config, @logger) ->
+  constructor: (@_files, @_contextBuilder, @_config, @logger) ->
     @_errorHandler = new (require './errorHandler') @_config, @logger
     @_timer = new (require './timer')()
 
@@ -11,29 +11,8 @@ module.exports = class TestCaseRunner
     do @runNextTest
 
   _createNewContext: ->
-    return true if @_freshContext
-
-    do @_browser.quit if @_browser
-
-    @_wd = require 'wd'
-    chai = require 'chai'
-    chaiAsPromised = require 'chai-as-promised'
-
-    chai.use chaiAsPromised
-    do chai.should
-    chaiAsPromised.transferPromiseness = @_wd.transferPromiseness
-
-    @_browser = @_wd.promiseChainRemote if @_config.wdRemote then @_config.wdRemote else undefined
-    @_context = @_browser.init @_config.browser
-    @_freshContext = true
-
+    {@_browser, @_context, @_wd} = do @_contextBuilder.build
     @_errorHandler.setBrowser @_browser
-
-    do @_addCustomAction
-
-  _addCustomAction: ->
-    for action in (require 'glob').sync(__dirname+'/action/*')
-      new (require action) @_wd, @_browser, @_config, @logger
 
   runNextTest: =>
     return do @_finish if @_fileIndex >= @_files.length
@@ -59,7 +38,7 @@ module.exports = class TestCaseRunner
     @logger.info '\nStarted: ' + testFile.replace @_config.root, ''
 
     do @_errorHandler.init
-    @_freshContext = false
+    do @_contextBuilder.setDirty
 
     @_testCase = new (require testFile) @_wd, @_browser, @_config, @logger
 
