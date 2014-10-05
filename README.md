@@ -195,3 +195,9 @@ context
 When the waitFor is an object then waitForTheFirstElementByCss action used
 
 #### waitForPopUp()
+
+Wait for a second window is opened
+
+#### pause()
+
+Pause the test until a key is pressed

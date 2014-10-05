@@ -31,7 +31,7 @@ module.exports = class ErrorHandler
 
     return context if @_config.onError.sleep or not @_config.onError.pause
 
-    context.then -> do (require './readLine').pauseUntilAnyKey
+    do context.pause
 
   handleTearDown: (error) =>
     @logger.error "Error from tearDown: #{error}"
