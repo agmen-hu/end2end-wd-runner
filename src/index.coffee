@@ -37,9 +37,8 @@ module.exports = class Index
     @config.root = @root
 
   createLogger: ->
-    loggerFactory = new (require './loggerFactory')
-    loggerFactory.setConfig @config
-    @logger = do loggerFactory.create
+    @logger = new (require './loggerFactory')()
+      .createFrom @config
 
   createRunner: ->
     new (require './selenium') @config, @logger
