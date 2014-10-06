@@ -99,7 +99,7 @@ end2end -c production.yml
 
 ### TestSuites
 
-We can run the test files with different configuration
+With test suites we can run all the test files (or just some) with different configuration at once
 
 ```yml
 include:
@@ -133,11 +133,10 @@ testSuites:
         grep: javascript/.+
 ```
 
-See the end2endTests folder for the whole example
-
 ## Examples
 
 end2end use the wd with promise chains so the Actions basically a set of methods for promise chain.
+See the end2endTests folder for the whole tests
 
 ```coffeescript
 module.exports = class Search extends require('end2end-wd-runner').Action
