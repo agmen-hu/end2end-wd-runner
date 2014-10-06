@@ -97,6 +97,44 @@ end2end #run with localhost configuration
 end2end -c production.yml
 ```
 
+### TestSuites
+
+We can run the test files with different configuration
+
+```yml
+include:
+  - config.yml
+
+onError:
+  pause: false
+
+testSuites:
+  # this one run with the config from the main include
+  AdaLovelace:
+
+  CharlesBabbage:
+    include:
+      - config_charlesBabbage.yml
+
+  DennisMRitchie:
+    # everything is overrideable except the selenium and the testSuites configurations
+    override:
+      search:
+        forWhat: 'Dennis M. Ritchie'
+      logger:
+        config:
+          level: 'debug'
+
+  onlyJavascript:
+    override:
+      # root also changeable with relative from the current root or absolute path
+      root: ../end2endTests
+      runner:
+        grep: javascript/.+
+```
+
+See the end2endTests folder for the whole example
+
 ## Examples
 
 end2end use the wd with promise chains so the Actions basically a set of methods for promise chain.
