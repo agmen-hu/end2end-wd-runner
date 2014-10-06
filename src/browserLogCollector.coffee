@@ -1,5 +1,6 @@
 module.exports = class BrowserLogCollector
-  constructor: (@logger) ->
+  setLogger: (logger) ->
+    @logger = logger
 
   collect: (browser) ->
     browser

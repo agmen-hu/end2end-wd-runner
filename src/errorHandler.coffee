@@ -1,11 +1,15 @@
 module.exports = class ErrorHandler
-  constructor: (@_config, @logger) ->
+  constructor: ->
     @_errorCount = 0;
-    @_browserLogCollector = new (require './browserLogCollector') @logger
+    @_browserLogCollector = new (require './browserLogCollector')()
 
-  setBrowser: (browser) -> @_browser = browser
+  init: (config, logger, browser) ->
+    @logger = logger
+    @_config = config
+    @_browser = browser
+    @_browserLogCollector.setLogger @logger
 
-  init: -> @_errorIsOccured = false
+  resetErrorIsOccurd: -> @_errorIsOccured = false
 
   errorIsOccured: -> @_errorIsOccured
 

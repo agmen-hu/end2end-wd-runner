@@ -44,11 +44,7 @@ module.exports = class Index
     new (require './selenium') @config, @logger
       .start()
       .then =>
-        fileFinder = new (require './fileFinder')
-        fileFinder.init @config, @logger
-        contextBuilder = new (require './contextBuilder')
-        contextBuilder.init @config, @logger
-        runner = new (require './testCaseRunner') do fileFinder.findTestFiles, contextBuilder, @config, @logger
-        do runner.start
+        new (require './testSuiteRunner') @config, @logger
+          .start()
       .fail (error) =>
         @logger.error "Selenium exited with code: #{error}"
