@@ -9,8 +9,14 @@ module.exports = class ContextBuilder
   setDirty: ->
     @_freshContext = false
 
+  buildForNew: ->
+    if not @_browser or @_config.runner.startTestsWithNewBrowser
+      do @build
+    else
+      do @getData
+
   build: ->
-    do @getData if @_freshContext
+    return do @getData if @_freshContext
     do @_browser.quit if @_browser
 
     @_wd = require 'wd'
