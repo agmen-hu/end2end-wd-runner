@@ -5,12 +5,12 @@ module.exports = class TestSuiteRunner
     @_configParser = new (require './configParser')()
     @_errorHandler = new (require './errorHandler')()
     @_loggerFactory = new (require './loggerFactory')()
-    @_contextBuilder = new (require './contextBuilder')()
-
-    @_contextBuilder.init @_config, @logger
+    @_contextBuilder = new (require './contextBuilder') @_config
 
   start: ->
     do @_timer.start
+    @_testSuiteIndex = 0
+    @_testSuiteNames = []
 
     if not @_config.testSuites
       return @_createTestCaseRunner(@_config).start().then @_finish
@@ -18,10 +18,8 @@ module.exports = class TestSuiteRunner
     @_testSuites = @_config.testSuites
     delete @_config.testSuites
 
-    @_testSuiteIndex = 0
     @_testSuiteNames = Object.keys @_testSuites
 
-    do @_contextBuilder.buildForNew
     do @runNextTestSuite
 
   _createTestCaseRunner: (config)->
@@ -85,5 +83,3 @@ module.exports = class TestSuiteRunner
   _getRootFor: (suiteConfig) ->
     return @_config.root if not suiteConfig.override or not suiteConfig.override.root
     return (require 'path').relative @_config.root, suiteConfig.override.root
-
-

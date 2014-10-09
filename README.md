@@ -121,6 +121,8 @@ testSuites:
     override:
       search:
         forWhat: 'Dennis M. Ritchie'
+      browser:
+        browserName: 'chrome'
       logger:
         config:
           level: 'debug'

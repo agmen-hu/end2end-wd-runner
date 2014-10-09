@@ -1,7 +1,7 @@
 {Q} = require 'wd'
 
 module.exports = class TestCaseRunner
-  constructor: (@_files, @_contextBuilder, @_errorHandler, @_config, @logger) ->
+  constructor: (@_files, @_contextBuilder, @_errorHandler, @_config, @logger, @_isLast) ->
     @_timer = new (require './timer')()
 
   start: ->
@@ -9,19 +9,19 @@ module.exports = class TestCaseRunner
     @_fileIndex = 0;
 
     @deferred = do Q.defer
-    do @_createNewContext
+    do @_setContextData
     do @runNextTest
 
     @deferred.promise
 
-  _createNewContext: ->
-    {@_browser, @_context, @_wd} = do @_contextBuilder.buildForNew
+  _setContextData: ->
+    {@_browser, @_context, @_wd} = do @_contextBuilder.getData
     @_errorHandler.init @_config, @logger, @_browser
 
   runNextTest: =>
     return do @_finish if @_fileIndex >= @_files.length
 
-    do @_createNewContext
+    do @_createNewContext if @_config.runner.startTestsWithNewBrowser
     do @_createNextTestCase
 
     @_context = @_context
@@ -40,11 +40,15 @@ module.exports = class TestCaseRunner
   _finish: ->
     do @deferred.resolve
 
+  _createNewContext: ->
+    do @_contextBuilder.build
+    do @_setContextData
+
   _createNextTestCase: ->
     testFile = @_files[@_fileIndex++]
     @logger.info '\nTestCase: ' + testFile.replace @_config.root, ''
 
-    do @_contextBuilder.setDirty
+    do @_contextBuilder.markAsDirty
     do @_errorHandler.resetErrorIsOccurd
 
     @_testCase = new (require testFile) @_wd, @_browser, @_config, @logger
@@ -55,8 +59,7 @@ module.exports = class TestCaseRunner
       .fail @_errorHandler.handleTearDown
 
   _createNewContextOnError: ->
-    return false if not @_config.onError.startNewBrowser or @_fileIndex > @_files.length
+    return false if not @_config.onError.startNewBrowser or @_fileIndex is @_files.length
 
-    {@_browser, @_context, @_wd} = do @_contextBuilder.build
-    @_errorHandler.init @_config, @logger, @_browser
+    do @_createNewContext
 
