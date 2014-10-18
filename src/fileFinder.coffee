@@ -1,13 +1,14 @@
 module.exports = class FileFinder
-  constructor: ->
-    @coffeeIsRegistred = false
+  constructor: (glob) ->
+    @_glob = if glob then glob else require 'glob'
+    @_coffeeIsRegistred = false
 
   init: (config, logger) ->
     @_config = config
     @logger = logger
 
   findTestFiles: ->
-    @_testFiles = (require 'glob').sync @_config.root + '**/*Test.*'
+    @_testFiles = @_glob.sync @_config.root + '**/*Test.*'
 
     grepRegexp = @_config.runner.grep
     @_filterTests grepRegexp, 'match'
@@ -15,7 +16,7 @@ module.exports = class FileFinder
     excludeRegexp = if grepRegexp then undefined else @_config.runner.exclude
     @_filterTests excludeRegexp
 
-    do @_handleCoffescript if not @coffeeIsRegistred
+    do @_handleCoffescript if not @_coffeeIsRegistred
 
     @_testFiles
 
@@ -30,7 +31,7 @@ module.exports = class FileFinder
   _handleCoffescript: ->
     try
       require 'coffee-script/register' if @_testFiles.some (file) -> file.match /\.coffee$/
-      @coffeeIsRegistred = true
+      @_coffeeIsRegistred = true
     catch error
       @_filterTests '\.coffee$'
       @logger.warn 'Coffee tests cannot be executed with coffee-script so these tests are removed from the hit list.'
