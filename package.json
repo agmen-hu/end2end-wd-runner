@@ -31,7 +31,8 @@
   },
   "main": "./main.js",
   "scripts": {
-    "prepublish": "coffee -o lib -c src"
+    "prepublish": "coffee -o lib -c src",
+    "test": "mocha test/test.coffee --compilers coffee:coffee-script/register"
   },
   "dependencies": {
     "commander": "2.3.x",
@@ -42,5 +43,11 @@
     "wd": "0.3.x",
     "chai": "1.9.x",
     "chai-as-promised": "4.1.x"
+  },
+  "devDependencies": {
+    "mocha": "1.21.x",
+    "yadda": "0.11.x",
+    "sinon": "1.10.x",
+    "fake-fs": "0.5.x"
   }
 }
