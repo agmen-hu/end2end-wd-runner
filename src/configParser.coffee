@@ -4,7 +4,7 @@ extend = require 'extend'
 
 module.exports = class ConfigParser
   constructor: (fs) ->
-    @_fs = if fs then fs else require 'fs'
+    @_fs = fs or require 'fs'
 
   merge: (config1, config2) ->
     extend true, {}, config1, config2

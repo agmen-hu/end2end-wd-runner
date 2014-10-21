@@ -1,36 +1,22 @@
-chai = require 'chai'
-Yadda = require 'yadda'
+Fs = require 'fake-fs'
 yml = require 'js-yaml'
 ConfigParser = require '../../src/configParser'
-Dictionary = Yadda.Dictionary
-English = Yadda.localisation.English
-Fs = require 'fake-fs'
-do chai.should
 
-module.exports = do ->
-  fs = undefined
-  config = undefined
-  configParser = undefined
+module.exports = (require '../library')()
+  .given 'a new config parser', ->
+    @context.fs = new Fs
+    @context.configParser = new ConfigParser @context.fs
 
-  dictionary = new Dictionary()
-    .define 'OBJECT', /(\{.+\})/
+  .given 'a config file $PATH with content $OBJECT', (path, content) ->
+    @context.fs.file path, yml.safeDump JSON.parse content
 
-  library = English.library(dictionary)
-    .given 'a new config parser', ->
-      fs = new Fs
-      config = undefined
-      configParser = new ConfigParser fs
+  .when 'merge $OBJECT to $OBJECT', (source, target) ->
+    source = JSON.parse source
+    target = JSON.parse target
+    @context.config = @context.configParser.merge source, target
 
-    .given 'a config file $PATH with content $OBJECT', (path, content) ->
-      fs.file path, yml.safeDump JSON.parse content
+  .when '$PATH is loaded', (path) ->
+    @context.config = @context.configParser.load path, if @context.config then @context.config else undefined
 
-    .when 'merge $OBJECT to $OBJECT', (source, target) ->
-      source = JSON.parse source
-      target = JSON.parse target
-      config = configParser.merge source, target
-
-    .when '$PATH is loaded', (path) ->
-      config = configParser.load path, if config then config else undefined
-
-    .then 'config is $OBJECT', (obj) ->
-      config.should.be.eql JSON.parse obj
+  .then 'config is $OBJECT', (obj) ->
+    @context.config.should.be.eql JSON.parse obj

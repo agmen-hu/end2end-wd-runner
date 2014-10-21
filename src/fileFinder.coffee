@@ -1,6 +1,6 @@
 module.exports = class FileFinder
   constructor: (glob) ->
-    @_glob = if glob then glob else require 'glob'
+    @_glob = glob or require 'glob'
     @_coffeeIsRegistred = false
 
   init: (config, logger) ->

@@ -2,8 +2,8 @@ Feature: Test file finding
 
 Background:
 
-  Given config {"root": "end2endTests", "runner": { "grep": "", "exlude":""}}
-  Given these test files ["end2endTests/fooTest.js", "end2endTests/fooTest.coffee", "end2endTests/barTest.coffee"]
+  Given a config {"root": "end2endTests", "runner": { "grep": "", "exlude":""}}
+  And these test files ["end2endTests/fooTest.js", "end2endTests/fooTest.coffee", "end2endTests/barTest.coffee"]
 
 Scenario: Should file all files
   Given a new file finder
@@ -22,5 +22,5 @@ Scenario: Should be able to exlude tests
 Scenario: Should not exclude when already grepped for tests
   Given a new file finder
   When exclude bar
-  When grep bar
+  And grep bar
   Then test files are ["end2endTests/barTest.coffee"]
