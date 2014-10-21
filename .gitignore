@@ -1,4 +1,5 @@
-node_modules
-phantomjsdriver.log
-lib
 .c9
+lib
+node_modules
+npm-debug.log
+phantomjsdriver.log

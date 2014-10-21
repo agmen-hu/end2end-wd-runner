@@ -1,1 +1,6 @@
+.c9
 src
+test
+gruntFile.js
+npm-debug.log
+phantomjsdriver.log
