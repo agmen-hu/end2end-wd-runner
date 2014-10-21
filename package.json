@@ -45,10 +45,12 @@
     "chai-as-promised": "4.1.x"
   },
   "devDependencies": {
+    "grunt": "0.4.x",
     "yadda": "0.11.x",
     "mocha": "1.21.x",
     "sinon": "1.10.x",
     "fake-fs": "0.5.x",
+    "grunt-contrib-watch": "0.6.x",
     "mocha-better-spec-reporter": "1.1.x"
   }
 }
