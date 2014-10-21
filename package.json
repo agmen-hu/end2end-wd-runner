@@ -1,7 +1,7 @@
 {
   "name": "end2end-wd-runner",
   "license": "MIT",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "All in end to end test runner for wd.js",
   "keywords": [
     "test",
