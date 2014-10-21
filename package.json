@@ -32,7 +32,7 @@
   "main": "./main.js",
   "scripts": {
     "prepublish": "coffee -o lib -c src",
-    "test": "mocha test/test.coffee --compilers coffee:coffee-script/register"
+    "test": "mocha --reporter mocha-better-spec-reporter --compilers coffee:coffee-script/register test/test.coffee"
   },
   "dependencies": {
     "commander": "2.3.x",
@@ -45,9 +45,10 @@
     "chai-as-promised": "4.1.x"
   },
   "devDependencies": {
-    "mocha": "1.21.x",
     "yadda": "0.11.x",
+    "mocha": "1.21.x",
     "sinon": "1.10.x",
-    "fake-fs": "0.5.x"
+    "fake-fs": "0.5.x",
+    "mocha-better-spec-reporter": "1.1.x"
   }
 }
