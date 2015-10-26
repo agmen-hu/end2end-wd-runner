@@ -13,6 +13,6 @@ module.exports = class WaitForPopUp extends Action
         handles.should.have.length 2
         return handles
 
-      .fail (err) ->
+      .catch (err) ->
         err.retriable = true
         throw err

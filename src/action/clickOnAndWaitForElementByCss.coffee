@@ -29,10 +29,10 @@ module.exports = class ClickOnAndWaitForElementByCss extends require '../action'
               return true if not deferred.promise.isPending()
               deferred.resolve selector)
 
-            .fail ->
+            .catch ->
               return true if not deferred.promise.isPending()
               do deferred.reject
 
     deferred.promise
-      .fail -> throw new Error "Not found any of the requested elements: #{selectors}"
+      .catch -> throw new Error "Not found any of the requested elements: #{selectors}"
       .then (selector) -> do waitFor[selector]

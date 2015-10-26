@@ -26,7 +26,7 @@ module.exports = class TestCaseRunner
 
     @_context = @_context
       .then @_testCase.runTest
-      .fail @_errorHandler.handle
+      .catch @_errorHandler.handle
       .then @_tearDown
       .then =>
         @logger.info "TestCase finished in #{do @_timer.getTime} sec"
@@ -60,7 +60,7 @@ module.exports = class TestCaseRunner
   _tearDown: =>
     @_testCase
       .runTearDown()
-      .fail @_errorHandler.handleTearDown
+      .catch @_errorHandler.handleTearDown
 
   _createNewContextOnError: ->
     return false if not @_config.onError.startNewBrowser or @_fileIndex is @_files.length

@@ -33,7 +33,7 @@ module.exports = class TestSuiteRunner
     {_browser} = do @_contextBuilder.getData
     _browser
       .chain()
-      .then -> _browser.quit().fail ->
+      .then -> _browser.quit().catch ->
       .done =>
         errorCount = do @_errorHandler.getErrorCount
         @logger.log(

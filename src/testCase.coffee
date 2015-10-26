@@ -24,7 +24,7 @@ module.exports = class TestCase
     try
       @tearDown()
       .then deferred.resolve
-      .fail deferred.reject
+      .catch deferred.reject
     catch error
       deferred.reject error
 

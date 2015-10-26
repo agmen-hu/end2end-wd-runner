@@ -46,5 +46,5 @@ module.exports = class Index
       .then =>
         new (require './testSuiteRunner') @config, @logger
           .start()
-      .fail (error) =>
+      .catch (error) =>
         @logger.error "Selenium exited with code: #{error}"
