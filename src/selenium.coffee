@@ -32,14 +32,15 @@ module.exports =  class Selenium
 
   _startServer: =>
     deferred = do Q.defer
-    server = (require 'selenium-standalone') stdio: null, @_config.selenium.arguments
-    showLog = @_config.selenium.showLog
-    server.stderr.on 'data', (output) =>
-      @_log output if showLog
-
-      if not @started and output.toString().match /Started.+\.Server/
-        @started = true
-        do deferred.resolve
+    options =
+      spawnOptions: { stdio: null }
+      seleniumArgs: @_config.selenium.arguments
+    (require 'selenium-standalone').start options, (err, child) =>
+      showLog = @_config.selenium.showLog
+      return deferred.reject err if err
+      child.stderr.on 'data', (output) => @_log output if showLog
+      @started = true
+      do deferred.resolve
 
     deferred.promise
 
@@ -56,4 +57,3 @@ module.exports =  class Selenium
     line = line.replace /[\d:.\s]{13}\w+\s-\s(.+)/, '$1'
 
     @logger[level] "Selenium: #{line}"
-
