@@ -51,7 +51,11 @@ module.exports = class TestCaseRunner
     do @_contextBuilder.markAsDirty
     do @_errorHandler.resetErrorIsOccurd
 
-    @_testCase = new (require testFile) @_wd, @_browser, @_config, @logger
+    @_testCase = new (require testFile)
+      wd: @_wd
+      browser: @_browser
+      config: @_config
+      logger: @logger
 
   _tearDown: =>
     @_testCase
@@ -62,4 +66,3 @@ module.exports = class TestCaseRunner
     return false if not @_config.onError.startNewBrowser or @_fileIndex is @_files.length
 
     do @_createNewContext
-

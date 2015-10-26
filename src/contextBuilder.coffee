@@ -53,4 +53,8 @@ module.exports = class ContextBuilder
 
   _addCustomAction: ->
     for action in (require 'glob').sync __dirname + '/action/*'
-      new (require action) @_wd, @_browser, @_config, @logger
+      new (require action)
+        wd: @_wd
+        browser: @_browser
+        config: @_config
+        logger: @logger

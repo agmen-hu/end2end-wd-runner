@@ -1,5 +1,5 @@
 module.exports = class Base
-  constructor: (wd, @_browser, @_config, @logger) ->
+  constructor: ({ wd, browser: @_browser, config: @_config, logger: @logger }) ->
     self = @;
     for property of self
       actionMethodName = property.match /(.+)Action$/
@@ -15,4 +15,3 @@ module.exports = class Base
 
   _nothing: =>
     do @_browser.noop
-

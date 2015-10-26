@@ -1,10 +1,18 @@
 Q = (require 'wd').Q
 
 module.exports = class TestCase
-  _actions: []
+  constructor: ({ @wd, browser: @_browser, config: @_config, @logger }) ->
 
-  constructor: (wd, @_browser, @_config, @logger) ->
-    new (require @_config.root + action) wd, @_browser, @_config, @logger for action in @_actions
+  useMixins: (mixins) ->
+    @useMixin mixin for mixin in mixins
+
+  useMixin: (mixin) ->
+    new mixin
+      wd: @wd
+      browser: @_browser
+      config: @_config
+      logger: @logger
+      testcase: @
 
   runTest: => do @test
 
