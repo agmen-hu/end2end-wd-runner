@@ -18,12 +18,12 @@ module.exports = class ErrorHandler
   handle: (error) =>
     if @_config.onError.takeScreenShot
       @_browser.saveScreenshot().then (fileName) =>
-        @logger.error do error.toString
+        @logger.error error.stack
         @logger.error "Screenshot from the error: #{fileName}"
         do @_handleError
 
     else
-      @logger.error do error.toString
+      @logger.error error.stack
       do @_handleError
 
   _handleError: (error) ->
